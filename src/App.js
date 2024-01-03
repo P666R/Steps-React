@@ -1,4 +1,4 @@
-import React from 'react';
+import { useState } from 'react';
 
 const messages = [
   'Learn React ⚛️',
@@ -7,14 +7,22 @@ const messages = [
 ];
 
 function App() {
-  const step = 1;
+  const [step, setStep] = useState(1);
 
   function handlePrevious() {
-    alert('Previous');
+    setStep((currentValue) => {
+      return currentValue === 1 ? 3 : currentValue - 1;
+    });
+
+    // if (step > 1) setStep(step - 1);
   }
 
   function handleNext() {
-    alert('Next');
+    setStep((currentValue) => {
+      return currentValue === 3 ? 1 : currentValue + 1;
+    });
+
+    // if (step < 3) setStep(step + 1);
   }
 
   return (
@@ -25,7 +33,9 @@ function App() {
         <div className={step === 3 ? 'active' : ''}>3</div>
       </div>
 
-      <p className="message">Step : {messages[step - 1]}</p>
+      <p className="message">
+        Step {step} : {messages[step - 1]}
+      </p>
 
       <div className="buttons">
         <button

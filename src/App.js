@@ -24,7 +24,10 @@ function App() {
 
   return (
     <>
-      <button className="close" onClick={() => setIsOpen(!isOpen)}>
+      <button
+        className="close"
+        onClick={() => setIsOpen((currVal) => !currVal)}
+      >
         &times;
       </button>
       {isOpen && (

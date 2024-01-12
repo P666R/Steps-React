@@ -73,7 +73,7 @@ function SelectPercentage({ quality, onSetQuality, children }) {
 }
 
 function Output({ bill, tip }) {
-  return <h3>{`You pay ₹${bill + tip} (₹100 + ₹${tip} tip)`}</h3>;
+  return <h3>{`You pay ₹${bill + tip} (₹${bill} + ₹${tip} tip)`}</h3>;
 }
 
 function Reset({ onHandleReset }) {

@@ -31,8 +31,12 @@ function TipCalculator() {
       <SelectPercentage quality={friendQuality} onSetQuality={setFriendQuality}>
         How did your friend like the service ?
       </SelectPercentage>
-      <Output bill={bill} tip={tip} />
-      <Reset onHandleReset={handleReset} />
+      {bill > 0 && (
+        <>
+          <Output bill={bill} tip={tip} />
+          <Reset onHandleReset={handleReset} />
+        </>
+      )}
     </div>
   );
 }

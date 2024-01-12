@@ -13,6 +13,9 @@ function TipCalculator() {
   const [yourQuality, setYourQuality] = useState(0);
   const [friendQuality, setFriendQuality] = useState(0);
 
+  //* Derived state
+  const tip = (bill * (yourQuality + friendQuality)) / 2 / 100;
+
   function handleReset() {
     setBill(0);
     setYourQuality(0);
@@ -28,11 +31,7 @@ function TipCalculator() {
       <SelectPercentage quality={friendQuality} onSetQuality={setFriendQuality}>
         How did your friend like the service ?
       </SelectPercentage>
-      <Output
-        bill={bill}
-        yourQuality={yourQuality}
-        friendQuality={friendQuality}
-      />
+      <Output bill={bill} tip={tip} />
       <Reset onHandleReset={handleReset} />
     </div>
   );
@@ -69,12 +68,8 @@ function SelectPercentage({ quality, onSetQuality, children }) {
   );
 }
 
-function Output({ bill, yourQuality, friendQuality }) {
-  const yourTip = yourQuality ? (yourQuality / 100) * bill : 0;
-  const friendTip = friendQuality ? (friendQuality / 100) * bill : 0;
-  const totalTip = (yourTip + friendTip) / 2;
-
-  return <h3>{`You pay ₹${bill + totalTip} (₹100 + ₹${totalTip} tip)`}</h3>;
+function Output({ bill, tip }) {
+  return <h3>{`You pay ₹${bill + tip} (₹100 + ₹${tip} tip)`}</h3>;
 }
 
 function Reset({ onHandleReset }) {

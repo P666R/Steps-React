@@ -1,91 +1,86 @@
 import { useState } from 'react';
 
-const messages = [
-  'Learn React ⚛️',
-  'Apply for jobs 💼',
-  'Invest your new income 🤑',
-];
-
 function App() {
   return (
     <div>
-      <Steps />
+      <TipCalculator />
     </div>
   );
 }
 
-function Steps() {
-  const [step, setStep] = useState(1);
-  const [isOpen, setIsOpen] = useState(true);
+function TipCalculator() {
+  const [bill, setBill] = useState(0);
+  const [yourQuality, setYourQuality] = useState(0);
+  const [friendQuality, setFriendQuality] = useState(0);
 
-  function handlePrevious() {
-    setStep((currentValue) => {
-      return currentValue === 1 ? 3 : currentValue - 1;
-    });
-  }
-
-  function handleNext() {
-    setStep((currentValue) => {
-      return currentValue === 3 ? 1 : currentValue + 1;
-    });
+  function handleReset() {
+    setBill(0);
+    setYourQuality(0);
+    setFriendQuality(0);
   }
 
   return (
     <div>
-      <button
-        className="close"
-        onClick={() => setIsOpen((currVal) => !currVal)}
-      >
-        &times;
-      </button>
-      {isOpen && (
-        <div className="steps">
-          <div className="numbers">
-            <div className={step === 1 ? 'active' : ''}>1</div>
-            <div className={step === 2 ? 'active' : ''}>2</div>
-            <div className={step === 3 ? 'active' : ''}>3</div>
-          </div>
-
-          <StepMessage step={step}>{messages[step - 1]}</StepMessage>
-
-          <div className="buttons">
-            <Button
-              textColor="#fff"
-              bgColor="#7950f2"
-              onClickHandler={handlePrevious}
-            >
-              <span>⏮️</span> Previous
-            </Button>
-
-            <Button
-              textColor="#fff"
-              bgColor="#7950f2"
-              onClickHandler={handleNext}
-            >
-              Next <span>⏭️</span>
-            </Button>
-          </div>
-        </div>
-      )}
+      <BillInput bill={bill} onSetBill={setBill} />
+      <SelectPercentage quality={yourQuality} onSetQuality={setYourQuality}>
+        How did you like the service ?
+      </SelectPercentage>
+      <SelectPercentage quality={friendQuality} onSetQuality={setFriendQuality}>
+        How did your friend like the service ?
+      </SelectPercentage>
+      <Output
+        bill={bill}
+        yourQuality={yourQuality}
+        friendQuality={friendQuality}
+      />
+      <Reset onHandleReset={handleReset} />
     </div>
   );
 }
 
-function Button({ textColor, bgColor, onClickHandler, children }) {
+function BillInput({ bill, onSetBill }) {
   return (
-    <button
-      style={{ backgroundColor: bgColor, color: textColor }}
-      onClick={onClickHandler}
-    >
-      {children}
-    </button>
+    <div>
+      How much was the bill ?
+      <input
+        type="number"
+        value={bill ? bill : ''}
+        onChange={(e) => onSetBill(Number(e.target.value))}
+        placeholder="Bill value"
+      />
+    </div>
   );
 }
 
-function StepMessage({ step, children }) {
+function SelectPercentage({ quality, onSetQuality, children }) {
   return (
-    <div className="message">
-      <h3>Step {step}</h3> {children}
+    <div>
+      <label>{children}</label>
+      <select
+        value={quality}
+        onChange={(e) => onSetQuality(Number(e.target.value))}
+      >
+        <option value="0">Dissatisfied (0%)</option>
+        <option value="5">It was ok (5%)</option>
+        <option value="10">It was good (10%)</option>
+        <option value="20">Absolutly amazing (20%)</option>
+      </select>
+    </div>
+  );
+}
+
+function Output({ bill, yourQuality, friendQuality }) {
+  const yourTip = yourQuality ? (yourQuality / 100) * bill : 0;
+  const friendTip = friendQuality ? (friendQuality / 100) * bill : 0;
+  const totalTip = (yourTip + friendTip) / 2;
+
+  return <h3>{`You pay ₹${bill + totalTip} (₹100 + ₹${totalTip} tip)`}</h3>;
+}
+
+function Reset({ onHandleReset }) {
+  return (
+    <div>
+      <button onClick={onHandleReset}>Reset</button>
     </div>
   );
 }
